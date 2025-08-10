@@ -160,18 +160,22 @@
         formData.append('Puntaje', score);
         formData.append('Resultado', finalResult.title);
 
-        if (SCRIPT_URL && SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbyLULKmpLWfS_gR-jIUBdcSe_hGdpZgSZ5Y30zHFJO9a7woQnRXHa0TibmIzAsAOiEU/exec") {
-            fetch(SCRIPT_URL, { method: 'POST', body: formData })
-              .then(res => res.json())
-              .then(data => setSubmissionStatus('success'))
-              .catch(error => {
-                console.error('Error:', error);
-                setSubmissionStatus('error');
-              });
-        } else {
-            console.warn("SCRIPT_URL no está configurada. Los resultados no se guardarán.");
-            setSubmissionStatus('error'); // Simula un error si la URL no está configurada
-        }
+        // Este código es el corregido
+if (SCRIPT_URL) { // Solo verificamos que la URL exista
+    fetch(SCRIPT_URL, { method: 'POST', body: formData })
+      .then(res => res.json())
+      .then(data => {
+        console.log('Success:', data);
+        setSubmissionStatus('success');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setSubmissionStatus('error');
+      });
+} else {
+    console.error("Error: SCRIPT_URL no está definida.");
+    setSubmissionStatus('error');
+}
       };
 
       const handleRestartQuiz = () => {
