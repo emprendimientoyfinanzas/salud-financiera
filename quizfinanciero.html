@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Financiero con Captura de Email</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    // --- DATOS Y CONFIGURACIÓN ---
+    const SCRIPT_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; // <-- ¡¡¡Recuerda pegar tu URL aquí!!!
+
+    const quizData = [
+      { questionText: '¿Con qué frecuencia sus ingresos superan sus gastos mensuales?', answerOptions: [{ text: 'Gasto menos de lo que gano', scoreValue: 2 }, { text: 'Gasto aproximadamente lo mismo que gano', scoreValue: 1 }, { text: 'Gasto más de lo que gano', scoreValue: 0 }, { text: 'Invierto todo mi sueldo en billetes de lotería', scoreValue: 0 }] },
+      { questionText: '¿Cómo gestiona el pago de sus deudas o servicios?', answerOptions: [{ text: 'Siempre pago completo y a tiempo', scoreValue: 2 }, { text: 'A veces me atraso o pago parcialmente', scoreValue: 1 }, { text: 'Consulto mi horóscopo financiero para decidir', scoreValue: 0 }, { text: 'Me atraso con frecuencia o no pago completo', scoreValue: 0 }] },
+      { questionText: '¿Qué tan constante es su hábito de ahorro?', answerOptions: [{ text: 'Ahorro una cantidad fija o planificada', scoreValue: 2 }, { text: 'Guardo mis ahorros debajo del colchón', scoreValue: 0 }, { text: 'Ahorro solo lo que me sobra al final del mes', scoreValue: 1 }, { text: 'No ahorro', scoreValue: 0 }] },
+      { questionText: '¿Cómo percibe su situación actual con respecto a las deudas?', answerOptions: [{ text: 'No tengo deudas o son manejables', scoreValue: 2 }, { text: 'Tengo dificultades para pagarlas', scoreValue: 1 }, { text: 'Estoy muy endeudado(a) o sobreendeudado(a)', scoreValue: 0 }, { text: 'Mi plan es pagar una deuda usando otra tarjeta de crédito', scoreValue: 0 }] },
+      { questionText: '¿Cómo describiría su historial crediticio?', answerOptions: [{ text: 'Es un misterio que prefiero no resolver', scoreValue: 0 }, { text: 'Tengo buen historial y realizo pagos puntuales', scoreValue: 2 }, { text: 'No estoy seguro(a) o no lo he consultado', scoreValue: 1 }, { text: 'Estoy reportado(a) con mora', scoreValue: 0 }] },
+      { questionText: '¿Con qué recursos cuenta para enfrentar emergencias económicas?', answerOptions: [{ text: 'Tengo un fondo de emergencia suficiente', scoreValue: 2 }, { text: 'Mi fondo de emergencia es la buena voluntad de mis amigos', scoreValue: 0 }, { text: 'Podría cubrir parte de una emergencia', scoreValue: 1 }, { text: 'No tengo cómo afrontar emergencias económicas', scoreValue: 0 }] },
+      { questionText: '¿Qué tipo de control lleva sobre sus ingresos y gastos?', answerOptions: [{ text: 'Registro y analizo regularmente mis finanzas', scoreValue: 2 }, { text: 'Llevo solo un control básico o parcial', scoreValue: 1 }, { text: 'No registro ni doy seguimiento a mis finanzas', scoreValue: 0 }, { text: 'Evito las deudas no teniendo ingresos', scoreValue: 0 }] },
+      { questionText: '¿Qué tan definidas tiene sus metas financieras y el plan para lograrlas?', answerOptions: [{ text: 'Tengo metas claras y un plan para cumplirlas', scoreValue: 2 }, { text: 'Tengo metas generales, pero sin estrategia concreta', scoreValue: 1 }, { text: 'Mi meta es esperar a recibir una herencia', scoreValue: 0 }, { text: 'No tengo metas financieras', scoreValue: 0 }] },
+      { questionText: '¿Qué tan preparado(a) está para identificar estafas o gastos innecesarios?', answerOptions: [{ text: 'Para evitar estafas, simplemente no uso internet', scoreValue: 0 }, { text: 'Identifico fácilmente fraudes o gastos innecesarios', scoreValue: 2 }, { text: 'A veces me cuesta reconocerlos', scoreValue: 1 }, { text: 'Me siento vulnerable o he sido víctima de estafas', scoreValue: 0 }] },
+      { questionText: '¿Qué nivel de conocimiento tiene sobre portafolios de inversión?', answerOptions: [{ text: 'Sé cómo diversificar y gestionar mis inversiones', scoreValue: 2 }, { text: 'Tengo una idea básica, pero poca experiencia', scoreValue: 1 }, { text: 'Creo que "diversificar" es tener billetes de diferentes colores', scoreValue: 0 }, { text: 'No tengo conocimientos sobre inversiones', scoreValue: 0 }] },
+    ];
+
+    const interpretations = {
+      solida: { title: 'Salud Financiera Sólida', description: '¡Excelente! Su salud financiera es fuerte y estable. La mayoría de sus respuestas indican que tiene hábitos financieros saludables y un control adecuado sobre sus ingresos, gastos, deudas y ahorros. Esto le permite tener tranquilidad y la capacidad de alcanzar sus metas a largo plazo.', plan: ['Mantenga sus buenos hábitos: Siga registrando y analizando sus finanzas. No se confíe y mantenga la disciplina.', 'Optimice sus ahorros: Si aún no lo hace, considere invertir una parte de sus ahorros en productos financieros de bajo riesgo para hacer crecer su dinero.', 'Planifique a largo plazo: Use su estabilidad financiera para planificar metas más grandes.', 'Proteja sus activos: Revise y actualice sus seguros (de vida, de salud, de hogar) para asegurar que sus activos estén protegidos ante cualquier imprevisto.'] },
+      moderada: { title: 'Salud Financiera Moderada', description: 'Su salud financiera es moderada. Tiene un buen punto de partida, pero hay áreas clave que necesitan un fortalecimiento. Es posible que tenga control en ciertos aspectos (como el ahorro), pero que otros (como el control de gastos o la gestión de deudas) le presenten desafíos.', plan: ['Identifique y enfóquese en las áreas débiles: Revise las preguntas donde obtuvo un puntaje bajo.', 'Cree un presupuesto detallado: Si su control de gastos es básico o parcial, establezca un presupuesto para cada categoría.', 'Priorice el pago de deudas: Si tiene deudas, cree un plan para pagarlas de manera más eficiente.', 'Busque conocimiento: Empiece a educarse sobre conceptos financieros básicos.'] },
+      fragil: { title: 'Salud Financiera Frágil', description: 'Su salud financiera es vulnerable y necesita atención urgente. Las respuestas indican que está enfrentando dificultades significativas en varios aspectos de sus finanzas. Es probable que el estrés financiero sea alto y que la falta de control le impida avanzar.', plan: ['Tome el control de sus finanzas: El primer paso es enfrentar la realidad. Reúna toda la información sobre sus ingresos, deudas, facturas y gastos.', 'Establezca un presupuesto de "supervivencia": Cree un presupuesto estricto que priorice los gastos esenciales.', 'Negocie y consolide deudas: Hable con sus acreedores para negociar planes de pago.', 'Construya un pequeño fondo de emergencia: Empiece a ahorrar lo que pueda, aunque sea una cantidad pequeña.', 'Busque ayuda profesional: Si se siente abrumado, considere hablar con un asesor financiero.'] }
+    };
+    
+    const getResultForScore = (score) => {
+      if (score >= 15) return interpretations.solida;
+      if (score >= 9) return interpretations.moderada;
+      return interpretations.fragil;
+    };
+    
+    // --- COMPONENTES DE REACT ---
+
+    function WelcomeScreen({ onStartQuiz }) {
+      return (
+        <div className="flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-xl animate-fade-in">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">Quiz de Salud Financiera</h1>
+          <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-6">Responda a estas 10 preguntas para evaluar su salud financiera. Al finalizar, obtendrá una interpretación y un plan de acción para mejorar sus finanzas personales.</p>
+          <button onClick={onStartQuiz} className="px-6 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Comenzar Quiz</button>
+        </div>
+      );
+    }
+
+    function QuizScreen({ question, questionIndex, totalQuestions, onAnswer }) {
+      const { useMemo } = React;
+      const shuffledAnswers = useMemo(() => {
+        const options = [...question.answerOptions];
+        for (let i = options.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [options[i], options[j]] = [options[j], options[i]];
+        }
+        return options;
+      }, [question]);
+
+      return (
+        <div className="flex flex-col p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-xl animate-fade-in">
+          <div className="text-xl sm:text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-4">
+            <span>Pregunta {questionIndex + 1}</span>/{totalQuestions}
+          </div>
+          <div className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-white mb-6">{question.questionText}</div>
+          <div className="flex flex-col gap-4">
+            {shuffledAnswers.map((option, index) => (
+              <button key={index} onClick={() => onAnswer(option.scoreValue)} className="p-4 text-left text-lg text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                {option.text}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    function UserInfoScreen({ onSubmit }) {
+      const [name, setName] = React.useState('');
+      const [email, setEmail] = React.useState('');
+      
+      return (
+        <div className="flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-xl animate-fade-in">
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-4">¡Casi listo!</h2>
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">Ingresa tus datos para guardar y ver tus resultados.</p>
+          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Escribe tu nombre aquí" className="w-full p-3 mb-4 text-center border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" />
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Escribe tu correo electrónico" className="w-full p-3 mb-6 text-center border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" />
+          <button onClick={() => onSubmit(name, email)} disabled={!name.trim() || !email.trim()} className="px-6 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">Ver mis Resultados</button>
+        </div>
+      );
+    }
+
+    function ResultsScreen({ score, result, onRestart, submissionStatus }) {
+      const resultColor = result.title.includes('Sólida') ? 'text-green-500' : result.title.includes('Moderada') ? 'text-yellow-500' : 'text-red-500';
+      const resultBg = result.title.includes('Sólida') ? 'bg-green-100 dark:bg-green-800' : result.title.includes('Moderada') ? 'bg-yellow-100 dark:bg-yellow-800' : 'bg-red-100 dark:bg-red-800';
+      
+      return (
+        <div className="flex flex-col items-center text-center p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-xl animate-fade-in">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-2">¡Quiz Finalizado!</h2>
+          {submissionStatus === 'success' && <p className="text-green-500 mb-4">Tus resultados han sido guardados.</p>}
+          {submissionStatus === 'error' && <p className="text-red-500 mb-4">Hubo un error al guardar. Aún puedes ver tus resultados.</p>}
+          <p className="text-lg sm:text-2xl text-gray-700 dark:text-gray-300 mb-2">Su puntuación total es: <span className="font-bold text-indigo-600 dark:text-indigo-400">{score}</span> de 20</p>
+          <div className={`p-6 rounded-lg my-6 w-full text-left ${resultBg}`}>
+            <h3 className={`text-3xl font-extrabold ${resultColor} mb-2`}>{result.title}</h3>
+            <p className="text-lg text-gray-700 dark:text-gray-200">{result.description}</p>
+          </div>
+          <div className="text-left mt-6 w-full">
+            <h4 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Plan de Acción y Recomendaciones:</h4>
+            <ul className="list-disc list-inside space-y-2 text-lg text-gray-700 dark:text-gray-300">
+              {result.plan.map((item, index) => <li key={index}>{item}</li>)}
+            </ul>
+          </div>
+          <button onClick={onRestart} className="mt-8 px-6 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700">Volver a Empezar</button>
+        </div>
+      );
+    }
+    
+    // --- COMPONENTE PRINCIPAL (ORQUESTADOR) ---
+    function App() {
+      const { useState } = React;
+      const [quizState, setQuizState] = useState('welcome');
+      const [submissionStatus, setSubmissionStatus] = useState('idle');
+      const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+      const [score, setScore] = useState(0);
+
+      const handleStartQuiz = () => setQuizState('quiz');
+
+      const handleAnswer = (scoreValue) => {
+        setScore(prev => prev + scoreValue);
+        const nextQuestion = currentQuestionIndex + 1;
+        if (nextQuestion < quizData.length) {
+          setCurrentQuestionIndex(nextQuestion);
+        } else {
+          setQuizState('user_info');
+        }
+      };
+
+      const handleSubmitResults = (name, email) => {
+        setQuizState('results');
+        setSubmissionStatus('sending');
+        const finalResult = getResultForScore(score);
+        
+        const formData = new FormData();
+        formData.append('Nombre', name);
+        formData.append('Email', email);
+        formData.append('Puntaje', score);
+        formData.append('Resultado', finalResult.title);
+
+        if (SCRIPT_URL && SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbyLULKmpLWfS_gR-jIUBdcSe_hGdpZgSZ5Y30zHFJO9a7woQnRXHa0TibmIzAsAOiEU/exec") {
+            fetch(SCRIPT_URL, { method: 'POST', body: formData })
+              .then(res => res.json())
+              .then(data => setSubmissionStatus('success'))
+              .catch(error => {
+                console.error('Error:', error);
+                setSubmissionStatus('error');
+              });
+        } else {
+            console.warn("SCRIPT_URL no está configurada. Los resultados no se guardarán.");
+            setSubmissionStatus('error'); // Simula un error si la URL no está configurada
+        }
+      };
+
+      const handleRestartQuiz = () => {
+        setQuizState('welcome');
+        setSubmissionStatus('idle');
+        setCurrentQuestionIndex(0);
+        setScore(0);
+      };
+
+      const renderContent = () => {
+        switch (quizState) {
+          case 'quiz': return <QuizScreen question={quizData[currentQuestionIndex]} onAnswer={handleAnswer} questionIndex={currentQuestionIndex} totalQuestions={quizData.length} />;
+          case 'user_info': return <UserInfoScreen onSubmit={handleSubmitResults} />;
+          case 'results': return <ResultsScreen score={score} result={getResultForScore(score)} submissionStatus={submissionStatus} onRestart={handleRestartQuiz} />;
+          default: return <WelcomeScreen onStartQuiz={handleStartQuiz} />;
+        }
+      };
+
+      return <div className="flex items-center justify-center min-h-screen p-4">{renderContent()}</div>;
+    }
+    
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
