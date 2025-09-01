@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quiz Indicador de salud financiera</title>
+  <title>Quiz Indicador de salud financiera Juvenil</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -22,31 +22,59 @@
 
   <script type="text/babel">
     // --- DATOS Y CONFIGURACIÓN ---
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwm_U30c0mm8cMe0DuxXRdqYS2rKqbCBSrFXrbpsP5IukqS5q6iCs0dJucjcV973wqR/exec"; // <-- ¡¡¡Recuerda pegar tu URL aquí!!!
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxCImROK3qi3RxqXBX0ptOahRgGaVaggATDkahIqkf039CS_08br7W-Ie9GHIfpslu7/exec"; //
 
+    // --- PREGUNTAS CON EMOTICONOS Y PONDERACIÓN ---
     const quizData = [
-      { questionText: '¿Con qué frecuencia sus ingresos superan sus gastos mensuales?', answerOptions: [{ text: 'Gasto menos de lo que gano', scoreValue: 2 }, { text: 'Gasto aproximadamente lo mismo que gano', scoreValue: 1 }, { text: 'Gasto más de lo que gano', scoreValue: 0 }, { text: 'Invierto todo mi sueldo en billetes de lotería', scoreValue: 0 }] },
-      { questionText: '¿Cómo gestiona el pago de sus deudas o servicios?', answerOptions: [{ text: 'Siempre pago completo y a tiempo', scoreValue: 2 }, { text: 'A veces me atraso o pago parcialmente', scoreValue: 1 }, { text: 'Consulto mi horóscopo financiero para decidir', scoreValue: 0 }, { text: 'Me atraso con frecuencia o no pago completo', scoreValue: 0 }] },
-      { questionText: '¿Qué tan constante es su hábito de ahorro?', answerOptions: [{ text: 'Ahorro una cantidad fija o planificada', scoreValue: 2 }, { text: 'Guardo mis ahorros debajo del colchón', scoreValue: 0 }, { text: 'Ahorro solo lo que me sobra al final del mes', scoreValue: 1 }, { text: 'No ahorro', scoreValue: 0 }] },
-      { questionText: '¿Cómo percibe su situación actual con respecto a las deudas?', answerOptions: [{ text: 'No tengo deudas o son manejables', scoreValue: 2 }, { text: 'Tengo dificultades para pagarlas', scoreValue: 1 }, { text: 'Estoy muy endeudado(a) o sobreendeudado(a)', scoreValue: 0 }, { text: 'Mi plan es pagar una deuda usando otra tarjeta de crédito', scoreValue: 0 }] },
-      { questionText: '¿Cómo describiría su historial crediticio?', answerOptions: [{ text: 'Es un misterio que prefiero no resolver', scoreValue: 0 }, { text: 'Tengo buen historial y realizo pagos puntuales', scoreValue: 2 }, { text: 'No estoy seguro(a) o no lo he consultado', scoreValue: 1 }, { text: 'Estoy reportado(a) con mora', scoreValue: 0 }] },
-      { questionText: '¿Con qué recursos cuenta para enfrentar emergencias económicas?', answerOptions: [{ text: 'Tengo un fondo de emergencia suficiente', scoreValue: 2 }, { text: 'Mi fondo de emergencia es la buena voluntad de mis amigos', scoreValue: 0 }, { text: 'Podría cubrir parte de una emergencia', scoreValue: 1 }, { text: 'No tengo cómo afrontar emergencias económicas', scoreValue: 0 }] },
-      { questionText: '¿Qué tipo de control lleva sobre sus ingresos y gastos?', answerOptions: [{ text: 'Registro y analizo regularmente mis finanzas', scoreValue: 2 }, { text: 'Llevo solo un control básico o parcial', scoreValue: 1 }, { text: 'No registro ni doy seguimiento a mis finanzas', scoreValue: 0 }, { text: 'Evito las deudas no teniendo ingresos', scoreValue: 0 }] },
-      { questionText: '¿Qué tan definidas tiene sus metas financieras y el plan para lograrlas?', answerOptions: [{ text: 'Tengo metas claras y un plan para cumplirlas', scoreValue: 2 }, { text: 'Tengo metas generales, pero sin estrategia concreta', scoreValue: 1 }, { text: 'Mi meta es esperar a recibir una herencia', scoreValue: 0 }, { text: 'No tengo metas financieras', scoreValue: 0 }] },
-      { questionText: '¿Qué tan preparado(a) está para identificar estafas o gastos innecesarios?', answerOptions: [{ text: 'Para evitar estafas, simplemente no uso internet', scoreValue: 0 }, { text: 'Identifico fácilmente fraudes o gastos innecesarios', scoreValue: 2 }, { text: 'A veces me cuesta reconocerlos', scoreValue: 1 }, { text: 'Me siento vulnerable o he sido víctima de estafas', scoreValue: 0 }] },
-      { questionText: '¿Qué nivel de conocimiento tiene sobre portafolios de inversión?', answerOptions: [{ text: 'Sé cómo diversificar y gestionar mis inversiones', scoreValue: 2 }, { text: 'Tengo una idea básica, pero poca experiencia', scoreValue: 1 }, { text: 'Creo que "diversificar" es tener billetes de diferentes colores', scoreValue: 0 }, { text: 'No tengo conocimientos sobre inversiones', scoreValue: 0 }] },
+      // SECCIÓN A
+      { questionText: '🤑 Si tus papás te dan $50,000 extra por buenas calificaciones, ¿qué harías primero?', answerOptions: [{ text: 'Guardarlo para algo importante que quiero comprar más adelante', scoreValue: 3 }, { text: 'Ahorrar una parte y gastar el resto en cosas que me gustan', scoreValue: 2 }, { text: 'Preguntarles a mis amigos qué harían ellos', scoreValue: 1 }, { text: 'Gastarlo inmediatamente en algo que me guste', scoreValue: 0 }] },
+      { questionText: '🤔 ¿Con qué frecuencia sabes exactamente cuánto dinero tienes disponible?', answerOptions: [{ text: 'Siempre sé cuánto tengo guardado y cuánto puedo gastar', scoreValue: 3 }, { text: 'Generalmente tengo una idea aproximada', scoreValue: 2 }, { text: 'Solo cuando necesito comprar algo importante', scoreValue: 1 }, { text: 'Casi nunca lo sé con exactitud', scoreValue: 0 }] },
+      { questionText: '🎮 Cuando quieres comprar algo que cuesta más de $100,000, ¿qué haces?', answerOptions: [{ text: 'Planifico desde antes cómo conseguir el dinero y cuándo comprarlo', scoreValue: 3 }, { text: 'Espero a tener suficiente dinero ahorrado', scoreValue: 2 }, { text: 'Les pido dinero prestado a mis papás', scoreValue: 1 }, { text: 'Lo compro aunque no tenga todo el dinero', scoreValue: 0 }] },
+      { questionText: '🧑‍🤝‍🧑 Cuando tus amigos van a comprar algo y no tienes dinero suficiente, ¿qué haces?', answerOptions: [{ text: 'Les digo que no puedo y propongo otra actividad', scoreValue: 3 }, { text: 'Voy con ellos pero no compro nada', scoreValue: 2 }, { text: 'Pido dinero prestado para acompañarlos', scoreValue: 1 }, { text: 'Compro aunque me quede sin dinero para la semana', scoreValue: 0 }] },
+      // SECCIÓN B
+      { questionText: '💰 ¿De dónde proviene principalmente tu dinero?', answerOptions: [{ text: 'Trabajo de medio tiempo + mesada/regalo ocasional', scoreValue: 3 }, { text: 'Trabajos esporádicos (cuidar niños, vender algo, etc.)', scoreValue: 2 }, { text: 'Solo de mesada o dinero que me dan mis papás', scoreValue: 1 }, { text: 'Pido dinero cuando lo necesito', scoreValue: 0 }] },
+      { questionText: '🆘 Si necesitaras $80,000 para una emergencia, ¿podrías conseguirlos?', answerOptions: [{ text: 'Sí, tengo dinero ahorrado para esas situaciones', scoreValue: 3 }, { text: 'Sí, combinando ahorros y pidiendo un poco prestado', scoreValue: 2 }, { text: 'Solo si mis papás me ayudan', scoreValue: 1 }, { text: 'Me sería muy difícil conseguir esa cantidad', scoreValue: 0 }] },
+      { questionText: '🗓️ ¿Qué tan regular es el dinero que recibes?', answerOptions: [{ text: 'Recibo una cantidad fija cada semana/mes', scoreValue: 3 }, { text: 'Recibo dinero regularmente, pero varía la cantidad', scoreValue: 2 }, { text: 'Solo recibo dinero ocasionalmente', scoreValue: 1 }, { text: 'Es muy irregular, nunca sé cuándo recibiré dinero', scoreValue: 0 }] },
+      // SECCIÓN C (PONDERADA)
+      { questionText: '💸 ¿Qué haces con el dinero que te sobra?', answerOptions: [{ text: 'Siempre guardo una parte fija antes de gastar', scoreValue: 5 }, { text: 'Guardo lo que me sobra después de mis gastos', scoreValue: 3 }, { text: 'A veces guardo algo, a veces no', scoreValue: 1 }, { text: 'Generalmente no me sobra dinero', scoreValue: 0 }] },
+      { questionText: '🐷 ¿Dónde guardas tu dinero ahorrado?', answerOptions: [{ text: 'En una cuenta de ahorros o lugar muy seguro', scoreValue: 5 }, { text: 'En una alcancía o caja fuerte en casa', scoreValue: 3 }, { text: 'En mi billetera o en un lugar fácil de acceder', scoreValue: 1 }, { text: 'No ahorro regularmente', scoreValue: 0 }] },
+      { questionText: '🎯 ¿Tienes una meta específica para tus ahorros?', answerOptions: [{ text: 'Sí, tengo metas claras (universidad, celular, viaje, etc.)', scoreValue: 5 }, { text: 'Tengo una idea general de para qué quiero ahorrar', scoreValue: 3 }, { text: 'Ahorro "por si acaso" pero sin meta específica', scoreValue: 1 }, { text: 'No tengo metas de ahorro', scoreValue: 0 }] },
+      // SECCIÓN D (PONDERADA)
+      { questionText: '📝 ¿Llevas algún registro de en qué gastas tu dinero?', answerOptions: [{ text: 'Anoto o recuerdo todos mis gastos importantes', scoreValue: 5 }, { text: 'Tengo una idea general de mis gastos principales', scoreValue: 3 }, { text: 'Solo recuerdo los gastos grandes', scoreValue: 1 }, { text: 'No llevo control de mis gastos', scoreValue: 0 }] },
+      { questionText: '⚖️ Con dinero limitado, ¿cómo decides en qué gastarlo?', answerOptions: [{ text: 'Primero lo necesario, luego lo que quiero', scoreValue: 5 }, { text: 'Trato de balancear entre necesidades y gustos', scoreValue: 3 }, { text: 'Depende de mi estado de ánimo del momento', scoreValue: 1 }, { text: 'Generalmente compro lo que más me guste', scoreValue: 0 }] },
+      { questionText: '🛍️ ¿Qué tan frecuente es que compres algo sin haberlo planeado?', answerOptions: [{ text: 'Muy rara vez, casi siempre planifico mis compras', scoreValue: 5 }, { text: 'Ocasionalmente, pero solo cosas pequeñas', scoreValue: 3 }, { text: 'Bastante seguido, especialmente si me gusta mucho', scoreValue: 1 }, { text: 'Muy seguido, es difícil resistir cuando veo algo que me gusta', scoreValue: 0 }] },
+      // SECCIÓN E
+      { questionText: '🧠 ¿Cuál es tu nivel de comprensión sobre: interés, inflación, riesgo financiero?', answerOptions: [{ text: 'Entiendo bien los tres conceptos', scoreValue: 3 }, { text: 'Entiendo algunos conceptos básicamente', scoreValue: 2 }, { text: 'He escuchado los términos pero no estoy seguro/a', scoreValue: 1 }, { text: 'No estoy familiarizado/a con estos términos', scoreValue: 0 }] },
+      { questionText: '💳 ¿Qué sabes sobre cuentas de ahorro, tarjetas débito y crédito?', answerOptions: [{ text: 'Conozco las diferencias y cómo funcionan', scoreValue: 3 }, { text: 'Tengo conocimiento básico de algunos', scoreValue: 2 }, { text: 'He escuchado de ellos pero no sé las diferencias', scoreValue: 1 }, { text: 'No sé mucho sobre productos financieros', scoreValue: 0 }] },
+      { questionText: '🙋 Cuando tienes dudas sobre dinero, ¿qué haces?', answerOptions: [{ text: 'Busco información confiable o pregunto a expertos', scoreValue: 3 }, { text: 'Les pregunto a mis papás o familiares', scoreValue: 2 }, { text: 'Les pregunto a mis amigos', scoreValue: 1 }, { text: 'Generalmente no busco ayuda', scoreValue: 0 }] },
+      { questionText: '📱 ¿Usas apps o herramientas digitales para manejar tu dinero?', answerOptions: [{ text: 'Sí, uso apps de bancos o de presupuesto', scoreValue: 3 }, { text: 'A veces uso apps para revisar saldo o ahorrar', scoreValue: 2 }, { text: 'Muy pocas veces', scoreValue: 1 }, { text: 'No uso ninguna aplicación para mis finanzas', scoreValue: 0 }] },
+      // SECCIÓN F
+      { questionText: '🎓 ¿Has pensado en cómo financiar tus estudios después del colegio?', answerOptions: [{ text: 'Sí, tengo un plan claro con mis papás', scoreValue: 3 }, { text: 'He pensado en algunas opciones generales', scoreValue: 2 }, { text: 'Un poco, pero no tengo un plan definido', scoreValue: 1 }, { text: 'No he pensado seriamente en eso todavía', scoreValue: 0 }] },
+      { questionText: '💼 ¿Qué opinas sobre trabajar mientras estudias?', answerOptions: [{ text: 'Es buena idea para aprender a manejar dinero y ganar experiencia', scoreValue: 3 }, { text: 'Está bien si no interfiere con los estudios', scoreValue: 2 }, { text: 'Prefiero enfocarme solo en estudiar', scoreValue: 1 }, { text: 'No he pensado en trabajar mientras estudio', scoreValue: 0 }] },
+      { questionText: '🚀 ¿Cuál es tu principal meta financiera para los próximos 2-3 años?', answerOptions: [{ text: 'Ahorrar para mi educación y tener independencia gradual', scoreValue: 3 }, { text: 'Ahorrar para comprar algo importante (ej: computador)', scoreValue: 2 }, { text: 'Tener dinero suficiente para mis gastos personales', scoreValue: 1 }, { text: 'No tengo metas financieras específicas', scoreValue: 0 }] },
+      { questionText: '💪 ¿Qué tan preparado/a te sientes para manejar tus finanzas como adulto/a?', answerOptions: [{ text: 'Muy preparado/a, sé lo básico y puedo aprender más', scoreValue: 3 }, { text: 'Bastante preparado/a, aunque necesito aprender más', scoreValue: 2 }, { text: 'Un poco preparado/a, me falta mucho por aprender', scoreValue: 1 }, { text: 'No me siento preparado/a, me da miedo manejar dinero solo/a', scoreValue: 0 }] },
+    ];
+    
+    // Lista de grados para el menú desplegable
+    const gradeOptions = [
+      '10A', '10B', '10C', '10D', '10E',
+      '11A', '11B', '11C', '11D', '11E'
     ];
 
     const interpretations = {
-      solida: { title: 'Salud Financiera Sólida', description: '¡Excelente! Su salud financiera es fuerte y estable. La mayoría de sus respuestas indican que tiene hábitos financieros saludables y un control adecuado sobre sus ingresos, gastos, deudas y ahorros. Esto le permite tener tranquilidad y la capacidad de alcanzar sus metas a largo plazo.', plan: ['Mantenga sus buenos hábitos: Siga registrando y analizando sus finanzas. No se confíe y mantenga la disciplina.', 'Optimice sus ahorros: Si aún no lo hace, considere invertir una parte de sus ahorros en productos financieros de bajo riesgo para hacer crecer su dinero.', 'Planifique a largo plazo: Use su estabilidad financiera para planificar metas más grandes.', 'Proteja sus activos: Revise y actualice sus seguros (de vida, de salud, de hogar) para asegurar que sus activos estén protegidos ante cualquier imprevisto.'] },
-      moderada: { title: 'Salud Financiera Moderada', description: 'Su salud financiera es moderada. Tiene un buen punto de partida, pero hay áreas clave que necesitan un fortalecimiento. Es posible que tenga control en ciertos aspectos (como el ahorro), pero que otros (como el control de gastos o la gestión de deudas) le presenten desafíos.', plan: ['Identifique y enfóquese en las áreas débiles: Revise las preguntas donde obtuvo un puntaje bajo.', 'Cree un presupuesto detallado: Si su control de gastos es básico o parcial, establezca un presupuesto para cada categoría.', 'Priorice el pago de deudas: Si tiene deudas, cree un plan para pagarlas de manera más eficiente.', 'Busque conocimiento: Empiece a educarse sobre conceptos financieros básicos.'] },
-      fragil: { title: 'Salud Financiera Frágil', description: 'Su salud financiera es vulnerable y necesita atención urgente. Las respuestas indican que está enfrentando dificultades significativas en varios aspectos de sus finanzas. Es probable que el estrés financiero sea alto y que la falta de control le impida avanzar.', plan: ['Tome el control de sus finanzas: El primer paso es enfrentar la realidad. Reúna toda la información sobre sus ingresos, deudas, facturas y gastos.', 'Establezca un presupuesto de "supervivencia": Cree un presupuesto estricto que priorice los gastos esenciales.', 'Negocie y consolide deudas: Hable con sus acreedores para negociar planes de pago.', 'Construya un pequeño fondo de emergencia: Empiece a ahorrar lo que pueda, aunque sea una cantidad pequeña.', 'Busque ayuda profesional: Si se siente abrumado, considere hablar con un asesor financiero.'] }
+      experto: { title: '💎 Experto Financiero Juvenil', description: '¡Felicitaciones! Tienes un control increíble sobre tu dinero. Entiendes la importancia de ahorrar, planificar y tomar decisiones inteligentes. Estás construyendo una base muy sólida para tu futuro financiero.', plan: ['Considera aprender sobre inversiones para jóvenes.', 'Ayuda a tus amigos a entender mejor sus finanzas.', 'Ponte metas de ahorro más grandes y a largo plazo.'] },
+      buenManejo: { title: '⭐ Buen Manejo Financiero', description: '¡Vas por un excelente camino! Tienes buenos hábitos, aunque todavía hay espacio para mejorar la consistencia. Sigue así y pronto serás un experto.', plan: ['Intenta crear un presupuesto simple para saber a dónde va tu dinero.', 'Define una meta de ahorro específica (ej: para un viaje, un dispositivo, etc.).', 'Antes de comprar algo, espera 24 horas para decidir si realmente lo necesitas.'] },
+      enDesarrollo: { title: '📈 En Desarrollo', description: 'Estás empezando a entender cómo funciona el dinero, pero a veces tomas decisiones impulsivas. Es el momento perfecto para fortalecer tus hábitos y tomar más control.', plan: ['Lleva un registro de tus gastos durante una semana.', 'Separa una pequeña cantidad para ahorrar tan pronto recibas dinero.', 'Habla con tus padres o un adulto de confianza sobre cómo manejan su dinero.'] },
+      necesitasApoyo: { title: '⚠️ Necesitas Apoyo', description: 'Parece que el manejo del dinero te resulta un poco complicado ahora mismo. No te preocupes, todos empezamos en algún punto. Con un poco de guía y práctica, puedes mejorar muchísimo.', plan: ['Empieza por lo básico: diferencia entre "querer" y "necesitar".', 'Ponte una meta muy pequeña de ahorro, como guardar $5,000 pesos a la semana.', 'Busca videos o blogs sencillos sobre finanzas para jóvenes.'] },
+      nivelInicial: { title: '🚨 Nivel Inicial', description: 'Manejar el dinero puede parecer abrumador, y es normal sentirse así. El primer paso es querer aprender. Estás en el punto de partida ideal para construir un futuro financiero increíble.', plan: ['No tengas miedo de preguntar. Habla con un adulto sobre tus dudas.', 'Enfócate en un solo objetivo: saber cuánto dinero tienes y en qué lo gastas.', 'Celebra los pequeños logros, como ahorrar tus primeros $10,000 pesos.'] }
     };
-    
+
     const getResultForScore = (score) => {
-      if (score >= 15) return interpretations.solida;
-      if (score >= 9) return interpretations.moderada;
-      return interpretations.fragil;
+      if (score >= 60) return interpretations.experto;
+      if (score >= 50) return interpretations.buenManejo;
+      if (score >= 40) return interpretations.enDesarrollo;
+      if (score >= 30) return interpretations.necesitasApoyo;
+      return interpretations.nivelInicial;
     };
     
     // --- COMPONENTES DE REACT ---
@@ -54,8 +82,8 @@
     function WelcomeScreen({ onStartQuiz }) {
       return (
         <div className="flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-xl animate-fade-in">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">Quiz de Salud Financiera</h1>
-          <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-6">Responda a estas 10 preguntas para evaluar su salud financiera. Al finalizar, obtendrá una interpretación y un plan de acción para mejorar sus finanzas personales.</p>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">Quiz de Salud Financiera Juvenil</h1>
+          <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-6">Responde a estas {quizData.length} preguntas para evaluar tu salud financiera y obtén un plan de acción para mejorar.</p>
           <button onClick={onStartQuiz} className="px-6 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 transition-colors duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Comenzar Quiz</button>
         </div>
       );
@@ -63,14 +91,7 @@
 
     function QuizScreen({ question, questionIndex, totalQuestions, onAnswer }) {
       const { useMemo } = React;
-      const shuffledAnswers = useMemo(() => {
-        const options = [...question.answerOptions];
-        for (let i = options.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [options[i], options[j]] = [options[j], options[i]];
-        }
-        return options;
-      }, [question]);
+      const shuffledAnswers = useMemo(() => [...question.answerOptions].sort(() => Math.random() - 0.5), [question]);
 
       return (
         <div className="flex flex-col p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-xl animate-fade-in">
@@ -89,32 +110,71 @@
       );
     }
 
+    // --- COMPONENTE DE FORMULARIO ACTUALIZADO CON MENÚ DESPLEGABLE ---
     function UserInfoScreen({ onSubmit }) {
       const [name, setName] = React.useState('');
       const [email, setEmail] = React.useState('');
+      const [school, setSchool] = React.useState('');
+      const [grade, setGrade] = React.useState(''); // El estado inicial es un string vacío
+      const [emailError, setEmailError] = React.useState('');
+
+      const validateEmail = (email) => {
+        if (!email) return false;
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+      };
+
+      const handleEmailChange = (e) => {
+        const newEmail = e.target.value;
+        setEmail(newEmail);
+        if (validateEmail(newEmail) || newEmail === '') {
+          setEmailError('');
+        } else {
+          setEmailError('Por favor, ingresa un correo válido.');
+        }
+      };
       
+      const isFormValid = name.trim() && validateEmail(email) && school.trim() && grade.trim();
+
       return (
         <div className="flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-xl animate-fade-in">
           <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-4">¡Casi listo!</h2>
           <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">Ingresa tus datos para guardar y ver tus resultados.</p>
-          <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Escribe tu nombre aquí" className="w-full p-3 mb-4 text-center border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" />
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Escribe tu correo electrónico" className="w-full p-3 mb-6 text-center border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" />
-          <button onClick={() => onSubmit(name, email)} disabled={!name.trim() || !email.trim()} className="px-6 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">Ver mis Resultados</button>
+          <div className="w-full flex flex-col gap-4">
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Escribe tu nombre completo" className="w-full p-3 text-center border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" />
+            <input type="email" value={email} onChange={handleEmailChange} placeholder="Escribe tu correo electrónico" className={`w-full p-3 text-center border rounded-lg focus:ring-2 ${emailError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-indigo-500'}`} />
+            {emailError && <p className="text-red-500 text-sm mt-[-10px]">{emailError}</p>}
+            <input type="text" value={school} onChange={(e) => setSchool(e.target.value)} placeholder="Nombre Institución Educativa" className="w-full p-3 text-center border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" />
+            
+            {/* --- CAMPO DE GRADO CONVERTIDO A <select> --- */}
+            <select
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+              className={`w-full p-3 text-center border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 appearance-none ${!grade ? 'text-gray-400 dark:text-gray-500' : 'text-gray-900 dark:text-gray-200'}`}
+            >
+              <option value="" disabled>-- Selecciona tu grado --</option>
+              {gradeOptions.map(optionValue => (
+                <option key={optionValue} value={optionValue} className="text-black">{optionValue}</option>
+              ))}
+            </select>
+          </div>
+          <button onClick={() => onSubmit(name, email, school, grade)} disabled={!isFormValid} className="mt-6 px-6 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-full shadow-lg hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">Ver mis Resultados</button>
         </div>
       );
     }
-
+    
     function ResultsScreen({ score, result, onRestart, submissionStatus }) {
-      const resultColor = result.title.includes('Sólida') ? 'text-green-500' : result.title.includes('Moderada') ? 'text-yellow-500' : 'text-red-500';
-      const resultBg = result.title.includes('Sólida') ? 'bg-green-100 dark:bg-green-800' : result.title.includes('Moderada') ? 'bg-yellow-100 dark:bg-yellow-800' : 'bg-red-100 dark:bg-red-800';
+      const resultColor = result.title.includes('Experto') ? 'text-cyan-400' : result.title.includes('Buen Manejo') ? 'text-green-400' : result.title.includes('Desarrollo') ? 'text-yellow-400' : result.title.includes('Apoyo') ? 'text-orange-400' : 'text-red-400';
+      const resultBg = result.title.includes('Experto') ? 'bg-cyan-900' : result.title.includes('Buen Manejo') ? 'bg-green-900' : result.title.includes('Desarrollo') ? 'bg-yellow-900' : result.title.includes('Apoyo') ? 'bg-orange-900' : 'bg-red-900';
+      const maxScore = quizData.reduce((sum, q) => sum + Math.max(...q.answerOptions.map(opt => opt.scoreValue)), 0);
       
       return (
         <div className="flex flex-col items-center text-center p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-xl animate-fade-in">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-2">¡Quiz Finalizado!</h2>
           {submissionStatus === 'success' && <p className="text-green-500 mb-4">Tus resultados han sido guardados.</p>}
           {submissionStatus === 'error' && <p className="text-red-500 mb-4">Hubo un error al guardar. Aún puedes ver tus resultados.</p>}
-          <p className="text-lg sm:text-2xl text-gray-700 dark:text-gray-300 mb-2">Su puntuación total es: <span className="font-bold text-indigo-600 dark:text-indigo-400">{score}</span> de 20</p>
-          <div className={`p-6 rounded-lg my-6 w-full text-left ${resultBg}`}>
+          <p className="text-lg sm:text-2xl text-gray-700 dark:text-gray-300 mb-2">Tu puntuación total es: <span className="font-bold text-indigo-600 dark:text-indigo-400">{score}</span> de {maxScore}</p>
+          <div className={`p-6 rounded-lg my-6 w-full text-left bg-opacity-20 ${resultBg}`}>
             <h3 className={`text-3xl font-extrabold ${resultColor} mb-2`}>{result.title}</h3>
             <p className="text-lg text-gray-700 dark:text-gray-200">{result.description}</p>
           </div>
@@ -149,7 +209,7 @@
         }
       };
 
-      const handleSubmitResults = (name, email) => {
+      const handleSubmitResults = (name, email, school, grade) => {
         setQuizState('results');
         setSubmissionStatus('sending');
         const finalResult = getResultForScore(score);
@@ -157,22 +217,18 @@
         const formData = new FormData();
         formData.append('Nombre', name);
         formData.append('Email', email);
+        formData.append('Institucion', school);
+        formData.append('Grado', grade);
         formData.append('Puntaje', score);
         formData.append('Resultado', finalResult.title);
 
-        // Este código es el corregido
-if (SCRIPT_URL) { // Solo verificamos que la URL exista
-    fetch(SCRIPT_URL, { method: 'POST', body: formData });
-
-// Confiamos en que los datos se enviaron, ya que sabemos que el script funciona.
-// Establecemos el estado de éxito inmediatamente después de enviar la solicitud,
-// sin esperar una respuesta que sabemos que el navegador bloqueará.
-console.log("Solicitud de guardado enviada. Asumiendo éxito debido a la peculiaridad de redirección de Google.");
-setSubmissionStatus('success');
-} else {
-    console.error("Error: SCRIPT_URL no está definida.");
-    setSubmissionStatus('error');
-}
+        if (SCRIPT_URL && SCRIPT_URL !== "URL_DE_TU_SCRIPT_DE_GOOGLE_AQUÍ") {
+          fetch(SCRIPT_URL, { method: 'POST', body: formData });
+          setSubmissionStatus('success');
+        } else {
+          console.error("Error: SCRIPT_URL no está definida.");
+          setSubmissionStatus('error');
+        }
       };
 
       const handleRestartQuiz = () => {
@@ -184,7 +240,7 @@ setSubmissionStatus('success');
 
       const renderContent = () => {
         switch (quizState) {
-          case 'quiz': return <QuizScreen question={quizData[currentQuestionIndex]} onAnswer={handleAnswer} questionIndex={currentQuestionIndex} totalQuestions={quizData.length} />;
+          case 'quiz': return <QuizScreen key={currentQuestionIndex} question={quizData[currentQuestionIndex]} onAnswer={handleAnswer} questionIndex={currentQuestionIndex} totalQuestions={quizData.length} />;
           case 'user_info': return <UserInfoScreen onSubmit={handleSubmitResults} />;
           case 'results': return <ResultsScreen score={score} result={getResultForScore(score)} submissionStatus={submissionStatus} onRestart={handleRestartQuiz} />;
           default: return <WelcomeScreen onStartQuiz={handleStartQuiz} />;
