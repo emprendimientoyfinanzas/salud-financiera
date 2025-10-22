@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indice de Salud Financiera</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    @keyframes fadeIn { 
+      from { opacity: 0; transform: translateY(20px); } 
+      to { opacity: 1; transform: translateY(0); } 
+    }
+    .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+    .progress-fill { transition: width 0.5s ease-in-out; }
+  </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900">
+
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    // --- DATOS Y CONFIGURACIÓN DEL QUIZ AVANZADO ---
+    const SCRIPT_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
+
+    const quizData = [
+      // SECCIÓN A
+      { section: "SECCIÓN A: COMPORTAMIENTO FINANCIERO", questionText: 'Si recibiera un bono inesperado de $500,000 pesos hoy, ¿cuál sería su primera reacción?', answerOptions: [{ text: 'Investigar las mejores opciones de inversión disponibles', scoreValue: 3 }, { text: 'Pagar deudas pendientes primero', scoreValue: 2 }, { text: 'Guardarlo en mi cuenta de ahorros mientras decido', scoreValue: 1 }, { text: 'Celebrar comprando algo que he querido por mucho tiempo', scoreValue: 0 }] },
+      { section: "SECCIÓN A: COMPORTAMIENTO FINANCIERO", questionText: 'La mayoría de personas como usted (edad/situación similar) probablemente:', answerOptions: [{ text: 'Revisan sus gastos semanalmente', scoreValue: 3 }, { text: 'Saben aproximadamente en qué gastan su dinero', scoreValue: 2 }, { text: 'Se sorprenden al ver su estado de cuenta', scoreValue: 1 }, { text: 'Prefieren no pensar mucho en sus gastos', scoreValue: 0 }] },
+      { section: "SECCIÓN A: COMPORTAMIENTO FINANCIERO", questionText: 'Durante los últimos 6 meses, ¿con qué frecuencia ha revisado o analizado sus finanzas personales?', answerOptions: [{ text: 'Semanalmente o más frecuente', scoreValue: 3 }, { text: 'Mensualmente', scoreValue: 2 }, { text: 'Cada 2-3 meses', scoreValue: 1 }, { text: 'Raramente o nunca', scoreValue: 0 }] },
+      { section: "SECCIÓN A: COMPORTAMIENTO FINANCIERO", questionText: 'Cuando se enfrenta a una decisión financiera importante, usted típicamente:', answerOptions: [{ text: 'Investiga, compara opciones y consulta fuentes confiables', scoreValue: 3 }, { text: 'Analiza pros y contras básicos', scoreValue: 2 }, { text: 'Pide consejo a familiares o amigos', scoreValue: 1 }, { text: 'Decide rápidamente basándose en la primera impresión', scoreValue: 0 }] },
+      // SECCIÓN B
+      { section: "SECCIÓN B: ESTABILIDAD Y PREPARACIÓN", questionText: 'Si perdiera su fuente principal de ingresos hoy, ¿por cuánto tiempo podría mantener su estilo de vida actual?', answerOptions: [{ text: 'Más de 6 meses', scoreValue: 3 }, { text: '3-6 meses', scoreValue: 2 }, { text: '1-3 meses', scoreValue: 1 }, { text: 'Menos de 1 mes', scoreValue: 0 }] },
+      { section: "SECCIÓN B: ESTABILIDAD Y PREPARACIÓN", questionText: 'Además de su trabajo principal, ¿tiene otras fuentes de ingresos?', answerOptions: [{ text: 'Múltiples fuentes estables (inversiones, negocio propio, etc.)', scoreValue: 3 }, { text: 'Una fuente adicional ocasional', scoreValue: 2 }, { text: 'Ingresos extras muy esporádicos', scoreValue: 1 }, { text: 'Solo el trabajo principal', scoreValue: 0 }] },
+      { section: "SECCIÓN B: ESTABILIDAD Y PREPARACIÓN", questionText: '¿Qué tan confiado se siente sobre su capacidad para manejar una emergencia médica de $2,000,000 pesos?', answerOptions: [{ text: 'Muy confiado, tengo recursos suficientes', scoreValue: 3 }, { text: 'Moderadamente confiado, podría manejarlo con esfuerzo', scoreValue: 2 }, { text: 'Poco confiado, sería muy difícil', scoreValue: 1 }, { text: 'Nada confiado, no podría manejarlo', scoreValue: 0 }] },
+      // SECCIÓN C
+      { section: "SECCIÓN C: HÁBITOS Y AUTOMATIZACIÓN", questionText: '¿Cuántos de sus pagos regulares (servicios, ahorros, inversiones) están automatizados?', answerOptions: [{ text: 'Más del 80% están automatizados', scoreValue: 3 }, { text: 'Entre 50-80% automatizados', scoreValue: 2 }, { text: 'Entre 20-50% automatizados', scoreValue: 1 }, { text: 'Menos del 20% o ninguno', scoreValue: 0 }] },
+      { section: "SECCIÓN C: HÁBITOS Y AUTOMATIZACIÓN", questionText: 'En el último año, ¿cuánto tiempo ha dedicado a educarse sobre finanzas personales?', answerOptions: [{ text: 'Más de 20 horas (cursos, libros, podcasts, etc.)', scoreValue: 3 }, { text: '10-20 horas', scoreValue: 2 }, { text: '5-10 horas', scoreValue: 1 }, { text: 'Menos de 5 horas', scoreValue: 0 }] },
+      { section: "SECCIÓN C: HÁBITOS Y AUTOMATIZACIÓN", questionText: 'Comparado con personas de su edad y nivel socioeconómico, ¿cómo calificaría su manejo del dinero?', answerOptions: [{ text: 'Significativamente mejor', scoreValue: 3 }, { text: 'Ligeramente mejor', scoreValue: 2 }, { text: 'Similar al promedio', scoreValue: 1 }, { text: 'Por debajo del promedio', scoreValue: 0 }] },
+      // SECCIÓN D
+      { section: "SECCIÓN D: DEUDAS Y CRÉDITO", questionText: '¿Qué porcentaje de sus límites de crédito disponibles utiliza normalmente?', answerOptions: [{ text: 'Menos del 10%', scoreValue: 3 }, { text: '10-30%', scoreValue: 2 }, { text: '30-60%', scoreValue: 1 }, { text: 'Más del 60% o no lo sé', scoreValue: 0 }] },
+      { section: "SECCIÓN D: DEUDAS Y CRÉDITO", questionText: '¿Cuál describe mejor su estrategia actual de pago de deudas?', answerOptions: [{ text: 'Pago más del mínimo, priorizando las de mayor interés', scoreValue: 3 }, { text: 'Pago más del mínimo ocasionalmente', scoreValue: 2 }, { text: 'Pago el mínimo requerido', scoreValue: 1 }, { text: 'A veces no puedo cubrir ni el pago mínimo', scoreValue: 0 }] },
+      { section: "SECCIÓN D: DEUDAS Y CRÉDITO", questionText: '¿Cuándo fue la última vez que revisó su reporte de crédito o score crediticio?', answerOptions: [{ text: 'En los últimos 3 meses', scoreValue: 3 }, { text: 'En los últimos 6-12 meses', scoreValue: 2 }, { text: 'Hace más de un año', scoreValue: 1 }, { text: 'Nunca lo he revisado o no sé cómo hacerlo', scoreValue: 0 }] },
+      // SECCIÓN E
+      { section: "SECCIÓN E: INVERSIÓN Y CRECIMIENTO", questionText: '¿Qué porcentaje de sus ingresos destina mensualmente a inversiones (diferentes a ahorro tradicional)?', answerOptions: [{ text: 'Más del 15%', scoreValue: 3 }, { text: '10-15%', scoreValue: 2 }, { text: '5-10%', scoreValue: 1 }, { text: 'Menos del 5% o nada', scoreValue: 0 }] },
+      { section: "SECCIÓN E: INVERSIÓN Y CRECIMIENTO", questionText: 'Su portafolio de inversiones incluye:', answerOptions: [{ text: 'Múltiples clases de activos (acciones, bonos, inmuebles, etc.)', scoreValue: 3 }, { text: '2-3 tipos diferentes de inversiones', scoreValue: 2 }, { text: 'Un solo tipo de inversión', scoreValue: 1 }, { text: 'No tengo inversiones', scoreValue: 0 }] },
+      { section: "SECCIÓN E: INVERSIÓN Y CRECIMIENTO", questionText: '¿Cómo reaccionaría si sus inversiones perdieran 20% de valor en un mes?', answerOptions: [{ text: 'Lo vería como una oportunidad de compra', scoreValue: 3 }, { text: 'Me mantendría tranquilo, es parte del proceso', scoreValue: 2 }, { text: 'Me preocuparía pero no actuaría impulsivamente', scoreValue: 1 }, { text: 'Vendería inmediatamente para evitar más pérdidas', scoreValue: 0 }] },
+      // SECCIÓN F
+      { section: "SECCIÓN F: PROTECCIÓN Y SEGUROS", questionText: '¿Cuántos de estos seguros tiene activos: vida, salud, hogar/arrendatario, auto, incapacidad?', answerOptions: [{ text: '4-5 seguros apropiados para mi situación', scoreValue: 3 }, { text: '2-3 seguros', scoreValue: 2 }, { text: 'Solo 1 seguro', scoreValue: 1 }, { text: 'Ninguno o no estoy seguro', scoreValue: 0 }] },
+      { section: "SECCIÓN F: PROTECCIÓN Y SEGUROS", questionText: '¿Tiene documentos legales actualizados como testamento o poderes notariales?', answerOptions: [{ text: 'Sí, actualizados en los últimos 2 años', scoreValue: 3 }, { text: 'Sí, pero necesitan actualización', scoreValue: 2 }, { text: 'Tengo algunos documentos básicos', scoreValue: 1 }, { text: 'No tengo ninguno', scoreValue: 0 }] },
+      // SECCIÓN G
+      { section: "SECCIÓN G: METAS Y PLANIFICACIÓN", questionText: 'Sus metas financieras a 5-10 años están:', answerOptions: [{ text: 'Claramente definidas con planes específicos y plazos', scoreValue: 3 }, { text: 'Definidas en términos generales con algunos pasos identificados', scoreValue: 2 }, { text: 'Vagamente definidas', scoreValue: 1 }, { text: 'No las tengo claras', scoreValue: 0 }] },
+      { section: "SECCIÓN G: METAS Y PLANIFICACIÓN", questionText: '¿Qué porcentaje de sus ingresos destina específicamente para la jubilación?', answerOptions: [{ text: '15% o más', scoreValue: 3 }, { text: '10-15%', scoreValue: 2 }, { text: '5-10%', scoreValue: 1 }, { text: 'Menos del 5% o nada específico', scoreValue: 0 }] },
+    ];
+    
+    // SISTEMA DE INTERPRETACIONES
+    const interpretations = {
+      excelencia: { title: 'Excelencia Financiera', description: 'Posee una salud financiera óptima con estrategias avanzadas. Su disciplina, planificación y conocimiento le otorgan una ventaja significativa para la creación de riqueza y la seguridad a largo plazo. Sus comportamientos están alineados con las mejores prácticas financieras.', plan: ['Optimización fiscal: Consulte a un experto para optimizar su carga tributaria.', 'Planificación de legado: Explore estrategias de planificación patrimonial y sucesoral avanzadas.', 'Inversiones alternativas: Investigue sobre inversiones alternativas (private equity, venture capital) si se alinea con su perfil de riesgo.', 'Mentoría: Considere compartir su conocimiento y experiencia financiera con otros.'] },
+      solida: { title: 'Salud Financiera Sólida', description: 'Tiene fundamentos muy fuertes y hábitos positivos. Su situación es estable y va por excelente camino. Hay algunas áreas de oportunidad para refinar su estrategia y acelerar el logro de sus metas financieras.', plan: ['Rebalanceo de portafolio: Revise y ajuste su portafolio de inversiones para asegurar que siga alineado con sus metas y tolerancia al riesgo.', 'Maximizar beneficios: Asegúrese de estar aprovechando al máximo los beneficios fiscales y de empleador disponibles.', 'Automatización avanzada: Busque automatizar no solo ahorros, sino también inversiones y pagos de deudas adicionales.', 'Evaluar seguros: Realice una revisión exhaustiva de sus coberturas de seguros para identificar posibles brechas.'] },
+      moderada: { title: 'Salud Financiera Moderada', description: 'Posee una base estable que requiere fortalecimiento. Entiende los conceptos básicos y tiene algunos buenos hábitos, pero existen inconsistencias que, si se abordan, pueden mejorar significativamente su bienestar financiero.', plan: ['Fondo de emergencia: Priorice la construcción de un fondo de emergencia que cubra de 3 a 6 meses de gastos.', 'Estrategia de deuda: Implemente un método estructurado para pagar deudas de alto interés (ej. "bola de nieve" o "avalancha").', 'Presupuesto detallado: Adopte un sistema de presupuesto (ej. 50/30/20) y sígalo consistentemente.', 'Educación enfocada: Dedique tiempo a aprender sobre un área específica que le interese, como inversión en ETFs o planificación de jubilación.'] },
+      desarrollo: { title: 'Salud Financiera En Desarrollo', description: 'Su situación financiera necesita atención inmediata en múltiples áreas. Está en una etapa inicial de construcción de hábitos saludables, y es crucial establecer bases sólidas para evitar problemas futuros y comenzar a progresar.', plan: ['Registro de gastos: Durante un mes, anote absolutamente todos sus gastos para entender a dónde va su dinero.', 'Crear un presupuesto básico: Identifique ingresos y gastos esenciales para asegurar que los cubre.', 'Plan de pago mínimo: Asegúrese de cubrir al menos los pagos mínimos de todas sus deudas para proteger su historial crediticio.', 'Buscar conocimiento gratuito: Aproveche recursos como blogs, podcasts y canales de YouTube de finanzas personales confiables.'] },
+      fragil: { title: 'Salud Financiera Frágil', description: 'Su situación requiere una intervención urgente y una reestructuración completa. Es probable que esté experimentando un alto nivel de estrés financiero. Tomar medidas inmediatas es fundamental para recuperar el control y la estabilidad.', plan: ['Busque ayuda profesional: Considere contactar a un asesor financiero o una organización de asesoría crediticia sin fines de lucro.', 'Control de gastos inmediato: Reduzca todos los gastos no esenciales de inmediato.', 'Comunicación con acreedores: Contacte a las entidades con las que tiene deudas para explorar posibles planes de pago o reestructuraciones.', 'Priorizar ingresos: Busque activamente formas de aumentar sus ingresos, incluso si son temporales.'] }
+    };
+
+    const getResultForScore = (score) => {
+      if (score >= 50) return interpretations.excelencia;
+      if (score >= 40) return interpretations.solida;
+      if (score >= 30) return interpretations.moderada;
+      if (score >= 20) return interpretations.desarrollo;
+      return interpretations.fragil;
+    };
+    
+    // --- COMPONENTES DE REACT ---
+
+    function WelcomeScreen({ onStartQuiz }) {
+      return (
+        <div className="flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-2xl animate-fade-in">
+          {/* AQUÍ ESTÁ EL TEXTO ACTUALIZADO */}
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-indigo-700 dark:text-indigo-400 mb-6">Indice de Salud Financiera</h1>
+          <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">Responda a estas preguntas para evaluar su indice de salud financiera. Al finalizar, obtendrá una interpretación y un plan de acción para mejorar sus finanzas personales.</p>
+          <button onClick={onStartQuiz} className="px-8 py-4 text-lg font-bold text-white bg-indigo-600 rounded-full shadow-md hover:bg-indigo-700 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Comenzar</button>
+        </div>
+      );
+    }
+
+    function QuizScreen({ question, questionIndex, totalQuestions, onAnswer }) {
+      const { useState, useMemo } = React;
+      const [selectedOption, setSelectedOption] = useState(null);
+
+      const shuffledAnswers = useMemo(() => [...question.answerOptions].sort(() => Math.random() - 0.5), [question]);
+
+      const handleNext = () => {
+        if (selectedOption) {
+          onAnswer(selectedOption.scoreValue);
+          setSelectedOption(null);
+        }
+      };
+      
+      const progressPercentage = ((questionIndex) / totalQuestions) * 100;
+
+      return (
+        <div className="flex flex-col p-6 sm:p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-3xl animate-fade-in min-h-[550px]">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-4">
+            <div className="bg-indigo-600 h-2.5 rounded-full progress-fill" style={{ width: `${progressPercentage}%` }}></div>
+          </div>
+          
+          <div className="flex justify-between items-center mb-4">
+            <div className="text-sm font-bold tracking-widest text-indigo-600 dark:text-indigo-400 uppercase">
+              {question.section}
+            </div>
+            <div className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+              Pregunta {questionIndex + 1} de {totalQuestions}
+            </div>
+          </div>
+          
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-8 flex-grow">{question.questionText}</h2>
+          
+          <div className="flex flex-col gap-3">
+            {shuffledAnswers.map((option, index) => {
+              const isSelected = selectedOption === option;
+              return (
+                <button 
+                  key={index} 
+                  onClick={() => setSelectedOption(option)} 
+                  className={`p-4 text-left text-lg font-medium rounded-xl border-2 transition-all duration-200 
+                    ${isSelected 
+                      ? 'border-indigo-600 bg-indigo-50 text-indigo-900 dark:bg-indigo-900 dark:text-indigo-100 dark:border-indigo-400 shadow-md' 
+                      : 'border-gray-200 bg-white text-gray-700 hover:border-indigo-300 hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-600'
+                    } focus:outline-none`}
+                >
+                  {option.text}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-8 flex justify-end">
+            <button 
+              onClick={handleNext}
+              disabled={!selectedOption}
+              className={`px-8 py-3 text-lg font-bold text-white rounded-full transition-all duration-300
+                ${selectedOption 
+                  ? 'bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transform hover:-translate-y-1' 
+                  : 'bg-gray-300 cursor-not-allowed dark:bg-gray-600'
+                }`}
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    function UserInfoScreen({ onSubmit }) {
+      const [name, setName] = React.useState('');
+      const [email, setEmail] = React.useState('');
+      const [emailError, setEmailError] = React.useState('');
+
+      const validateEmail = (emailToValidate) => {
+        if (!emailToValidate) {
+          setEmailError('El correo electrónico es requerido.'); return false;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailToValidate)) {
+          setEmailError('Por favor, ingrese un correo electrónico válido.'); return false;
+        }
+        setEmailError(''); return true;
+      };
+
+      const handleEmailChange = (e) => setEmail(e.target.value);
+      const handleBlur = () => validateEmail(email);
+      const handleSubmit = () => { if (name.trim() && validateEmail(email)) onSubmit(name, email); };
+      const isFormValid = name.trim().length > 0 && email.trim().length > 0 && !emailError;
+
+      return (
+        <div className="flex flex-col items-center justify-center text-center p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md animate-fade-in">
+          <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-4">¡Resultados Listos!</h2>
+          <p className="text-gray-600 dark:text-gray-300 mb-8">Ingrese sus datos para guardar y recibir su informe personalizado.</p>
+          <div className="w-full mb-4">
+            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Escriba su nombre" className="w-full p-4 text-lg border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-0 outline-none transition-colors dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+          </div>
+          <div className="w-full mb-6">
+            <input type="email" value={email} onChange={handleEmailChange} onBlur={handleBlur} placeholder="Escriba su correo electrónico" className={`w-full p-4 text-lg border-2 rounded-xl outline-none transition-colors dark:bg-gray-700 dark:text-white ${emailError ? 'border-red-500 focus:border-red-500' : 'border-gray-200 focus:border-indigo-500 dark:border-gray-600'}`} />
+            {emailError && <p className="text-red-500 text-sm mt-2 text-left">{emailError}</p>}
+          </div>
+          <button onClick={handleSubmit} disabled={!isFormValid} className={`w-full py-4 text-xl font-bold text-white rounded-xl transition-all duration-300 ${isFormValid ? 'bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg' : 'bg-gray-300 cursor-not-allowed dark:bg-gray-600'}`}>Ver mi Informe</button>
+        </div>
+      );
+    }
+
+    function ResultsScreen({ score, result, onRestart, submissionStatus }) {
+      const resultColorClass = {
+        'Excelencia Financiera': 'text-green-600 dark:text-green-400',
+        'Salud Financiera Sólida': 'text-cyan-600 dark:text-cyan-400',
+        'Salud Financiera Moderada': 'text-yellow-600 dark:text-yellow-400',
+        'Salud Financiera En Desarrollo': 'text-orange-600 dark:text-orange-400',
+        'Salud Financiera Frágil': 'text-red-600 dark:text-red-400'
+      }[result.title] || 'text-gray-800';
+       const resultBgClass = {
+        'Excelencia Financiera': 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
+        'Salud Financiera Sólida': 'bg-cyan-50 dark:bg-cyan-900/20 border-cyan-200 dark:border-cyan-800',
+        'Salud Financiera Moderada': 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800',
+        'Salud Financiera En Desarrollo': 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800',
+        'Salud Financiera Frágil': 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+      }[result.title] || 'bg-gray-50';
+
+      return (
+        <div className="flex flex-col items-center p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl animate-fade-in">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-6">Informe de Bienestar Financiero</h2>
+          {submissionStatus === 'success' && <div className="mb-6 p-3 bg-green-100 text-green-700 rounded-lg text-sm dark:bg-green-900/30 dark:text-green-400">Sus resultados han sido guardados.</div>}
+          
+          <div className="text-center mb-8">
+            <p className="text-lg text-gray-600 dark:text-gray-300">Puntuación Total:</p>
+            <p className={`text-6xl font-extrabold mt-1 ${resultColorClass}`}>{score} <span className="text-3xl text-gray-400">/ 60</span></p>
+          </div>
+
+          <div className={`p-8 rounded-2xl border-2 w-full text-left mb-8 ${resultBgClass}`}>
+            <h3 className={`text-3xl font-bold mb-4 ${resultColorClass}`}>{result.title}</h3>
+            <p className="text-lg text-gray-800 dark:text-gray-200 leading-relaxed">{result.description}</p>
+          </div>
+
+          <div className="w-full text-left">
+            <h4 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Plan de Acción Sugerido</h4>
+            <div className="grid gap-4">
+              {result.plan.map((item, index) => (
+                <div key={index} className="flex items-start p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                  <svg className={`flex-shrink-0 h-6 w-6 mr-4 ${resultColorClass}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <p className="text-gray-700 dark:text-gray-300">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <button onClick={onRestart} className="mt-12 px-8 py-3 text-lg font-semibold text-indigo-600 bg-indigo-50 rounded-full hover:bg-indigo-100 transition-colors dark:bg-gray-700 dark:text-indigo-300 dark:hover:bg-gray-600">
+            Realizar Evaluación Nuevamente
+          </button>
+        </div>
+      );
+    }
+    
+    // --- COMPONENTE PRINCIPAL (ORQUESTADOR) ---
+    function App() {
+      const { useState } = React;
+      const [quizState, setQuizState] = useState('welcome');
+      const [submissionStatus, setSubmissionStatus] = useState('idle');
+      const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+      const [score, setScore] = useState(0);
+
+      const handleStartQuiz = () => setQuizState('quiz');
+
+      const handleAnswer = (scoreValue) => {
+        setScore(prev => prev + scoreValue);
+        const nextQuestion = currentQuestionIndex + 1;
+        if (nextQuestion < quizData.length) {
+          setCurrentQuestionIndex(nextQuestion);
+        } else {
+          setQuizState('user_info');
+        }
+      };
+
+      const handleSubmitResults = (name, email) => {
+        setQuizState('results');
+        setSubmissionStatus('sending');
+        const finalResult = getResultForScore(score);
+        
+        const formData = new FormData();
+        formData.append('Nombre', name);
+        formData.append('Email', email);
+        formData.append('Puntaje', score);
+        formData.append('Resultado', finalResult.title);
+
+        if (SCRIPT_URL && SCRIPT_URL !== "TU_URL_DE_APPS_SCRIPT_AQUI") {
+             fetch(SCRIPT_URL, { method: 'POST', body: formData, mode: 'no-cors' })
+              .then(() => setSubmissionStatus('success'))
+              .catch(error => { console.error('Error de red:', error); setSubmissionStatus('error'); });
+        } else {
+            console.warn("SCRIPT_URL no está configurada.");
+            setTimeout(() => setSubmissionStatus('success'), 500); // Simula éxito
+        }
+      };
+
+      const handleRestartQuiz = () => {
+        setQuizState('welcome');
+        setSubmissionStatus('idle');
+        setCurrentQuestionIndex(0);
+        setScore(0);
+      };
+
+      const renderContent = () => {
+        switch (quizState) {
+          case 'quiz': return <QuizScreen question={quizData[currentQuestionIndex]} onAnswer={handleAnswer} questionIndex={currentQuestionIndex} totalQuestions={quizData.length} />;
+          case 'user_info': return <UserInfoScreen onSubmit={handleSubmitResults} />;
+          case 'results': return <ResultsScreen score={score} result={getResultForScore(score)} submissionStatus={submissionStatus} onRestart={handleRestartQuiz} />;
+          default: return <WelcomeScreen onStartQuiz={handleStartQuiz} />;
+        }
+      };
+
+      return <div className="flex items-center justify-center min-h-screen p-4 py-12">{renderContent()}</div>;
+    }
+    
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
